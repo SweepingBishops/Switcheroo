@@ -1,0 +1,24 @@
+[
+    {
+        "title": "Question 1",
+        "text": "\\text{We assume all of you know the Fibonacci sequence, if not, ask us. The first 7 terms are given below}\\\\F_1=1\\\\F_2=1\\\\F_3=2\\\\F_4=3\\\\F_5=5\\\\F_6=8\\\\F_7=13\\\\\\text{As you can see $F_7$ is the first two digit term in the Fibonacii sequence. What is the index of the first term with 5000 digits.}",
+        "answer": "23922"
+    },
+    {
+
+        "title": "Question 2",
+        "text": "\\text{Consider the number $585=1001001001_2$ (binary).}\\\\\\text{This number is palindromic in both bases. Find the sum of all numbers, less than 100,000 , which are palindromic in both base 10 and base 2.}\\\\\\text{Note that in either base, the palindrome should not include leading zeroes}",
+        "answer": "286602"
+    },
+    {
+        "title": "Question 3",
+        "text": "\\text{Let $s(n)$ be the smallest number $m$ such that $n$ divides $m!$ For example, $s(10)=5$ and $s(25)=10.$}\\\\\\text{Find $s(56118750)$}",
+        "answer": "73"
+    },
+    {
+        "title": "Question 4",
+        "text": "\\text{Working from left-to-right, if no digit is exceeded by the digit to its left, it is called an increasing number; for example 134468.}\\\\\\text{Similarly if no digit is exceeded by the digit to its right, it is called a decreasing number; for exapmle, 66420.}\\\\\\text{If a number is neither increasing nor decreasing, it is called a 'bouncy' number; for example 67420.}\\\\\\text{Clearly there cannot be any bouncy numbers below 100, but just over half of the numbers below one thousand (525) are bouncy.}\\\\\\text{Bouncy numbers become more and more common the higher we go, by the time we reach 21780, the proportion of bouncy numbers is equal to 90%.}\\\\\\text{Find the least number for which the proportion of bouncy numbers is exactly 95%.}",
+        "answer": "63720"
+    }
+    
+]

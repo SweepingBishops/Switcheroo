@@ -1,0 +1,10 @@
+{
+    "team_name": {
+        "Question 1": "Paris",  // Team's answer for Question 1
+        "Question 2": "Shakespeare",  // Team's answer for Question 2
+        "Question 3": "4",  // Team's answer for Question 3
+        "Question 4": "Mars"  // Team's answer for Question 4
+    }
+}
+
+

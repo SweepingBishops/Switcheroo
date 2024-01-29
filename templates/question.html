@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Question</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: orange;
+        }
+        .container {
+            background-color: #fff;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: px;
+            font-size: 16px;
+            padding-right: 1px;
+        }
+        button[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding-bottom: 10px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        button[type="back"] {
+            background-color: rgb(255, 72, 0);
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s;
+            display: block;
+            margin: 0 auto;
+        }
+        button[type="back"]:hover{
+            background-color: green;
+        }
+    </style>
+    <script type="text/javascript" async
+    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1> {{question_data['title']}} </h1>
+        <!-- {{question_data["text"]}} -->
+        <div id="latex-container">
+           \[\begin{gather*} 
+            {{ question_data['text'] }} 
+           \end{gather*}\]
+          </div>          
+        <form method="POST">
+            <div class="form-group">
+                <label for="answer">Answer:</label>
+                <input type="text" name="answer" id="answer" required>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type = "back" onclick="location.href='{{url_for("index")}}'">Back to Questions</button>
+        </form>
+    </div>
+    <script type="text/javascript">
+        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "latex-container"]);
+      </script>
+      
+</body>
+</html>
