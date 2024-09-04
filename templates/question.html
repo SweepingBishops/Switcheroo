@@ -9,6 +9,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            justify-content: center;
         }
         h1 {
             text-align: center;
@@ -17,8 +18,8 @@
         }
         .container {
             background-color: #fff;
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 1000px;
+            margin: 100px auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -37,7 +38,7 @@
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
-            border-radius: px;
+            border-radius: 5px;
             font-size: 16px;
             padding-right: 1px;
         }
@@ -45,7 +46,6 @@
             background-color: #007bff;
             color: #fff;
             border: none;
-            padding-bottom: 10px;
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
@@ -65,25 +65,30 @@
             font-size: 18px;
             transition: background-color 0.3s;
             display: block;
-            margin: 0 auto;
+            margin: 20px auto 0;
         }
-        button[type="back"]:hover{
+        button[type="back"]:hover {
             background-color: green;
         }
+        .attempts {
+            margin: 20px 0;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
     </style>
-    <script type="text/javascript" async
-    src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML">
-    </script>
 </head>
 <body>
     <div class="container">
-        <h1> {{question_data['title']}} </h1>
-        <!-- {{question_data["text"]}} -->
-        <div id="latex-container">
-           \[\begin{gather*} 
-            {{ question_data['text'] }} 
-           \end{gather*}\]
-          </div>          
+        <h1>{{ question_data['title'] }}</h1>
+        <img src="{{url_for('static', filename='questions/' + question_data['text'])}}" alt="Question Image" style="display: block; margin: 0 auto;">
+        
+        <!-- Number of Attempts Section -->
+        <div class="attempts">
+            Number of attempts left : {{ attempt }}
+        </div>
+        <!-- <h1>{{ attempt }}</h1> -->
+
         <form method="POST">
             <div class="form-group">
                 <label for="answer">Answer:</label>
@@ -91,12 +96,8 @@
             </div>
             <br>
             <button type="submit" class="btn btn-primary">Submit</button>
-            <button type = "back" onclick="location.href='{{url_for("index")}}'">Back to Questions</button>
+            <button type="back" class="btn btn-back" onclick="location.href='{{ url_for('index') }}'">Back to Questions</button>
         </form>
     </div>
-    <script type="text/javascript">
-        MathJax.Hub.Queue(["Typeset", MathJax.Hub, "latex-container"]);
-      </script>
-      
 </body>
 </html>

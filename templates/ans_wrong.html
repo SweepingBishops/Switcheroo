@@ -13,7 +13,7 @@
         .container {
             background-color: #fff;
             max-width: 400px;
-            margin: 0 auto;
+            margin: 200px auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -50,6 +50,7 @@
     <div class="container">
         <h1>Incorrect Answer</h1>
         <p>Your answer is wrong :P</p>
+        <p>Number of remaining attempts : {{ attempt }}</p>
         <button onclick="location.href='{{url_for("index")}}'">Back to Questions</button>
     </div>
 </body>

@@ -18,11 +18,12 @@
         .container {
             background-color: #fff;
             max-width: 400px;
-            margin: 0 auto;
+            margin: 200px auto;
             padding: 20px;
-            border: 1px solid #ccc;
+            border: 10px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         ul {
             list-style: none;
@@ -39,14 +40,38 @@
         a:hover {
             text-decoration: underline;
         }
+        .answered {
+            color: green;
+        }
+        .logout-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .logout-button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
+    <button class="logout-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
     <div class="container">
         <h1>Question List</h1>
         <ul>
             {% for question in questions %}
-                <li><a href="{{ url_for('question', question_id=loop.index0) }}">{{ question.title }}</a></li>
+                {% set answered = stats_data[team_name][loop.index0 + 1][1] %}
+                <li>
+                    <a href="{{ url_for('question', question_id=loop.index0) }}" class="{{ 'answered' if answered else '' }}">
+                        {{ question.title }}
+                    </a>
+                </li>
             {% endfor %}
         </ul>
     </div>

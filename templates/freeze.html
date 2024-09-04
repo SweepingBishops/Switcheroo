@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Correct Answer</title>
+    <title>Max Number of attempts reached</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         body {
@@ -15,14 +15,14 @@
             max-width: 400px;
             margin: 200px auto;
             padding: 20px;
-            border: 1px solid #ccc;
+            border: 10px solid #ccc;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
-            color: #007bff;
+            color: orange;
         }
         p {
             font-size: 18px;
@@ -48,8 +48,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Correct Answer</h1>
-        <p>Your answer is correct!</p>
+        <!-- <h1>Max Number of Attempts reached</h1> -->
+        <h1>{{ title_message }}</h1>
+        <p>{{ freeze_message }}</p>
         <button onclick="location.href='{{url_for("index")}}'">Back to Questions</button>
     </div>
 </body>
