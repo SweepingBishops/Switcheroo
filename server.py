@@ -40,12 +40,34 @@ stats_data = set_attempts()
 update_attempt(stats_data)
 TOTAL_ATTEMPTS = 3
 
+timer_running = True
+
+@app.route('/start_timer', methods=['GET', 'POST'])
+def start_timer():
+    print('start')
+    global timer_running
+    if 'admin_name' in session:
+        timer_running = True
+        flash('Timer started!', 'success')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/pause_timer', methods=['GET', 'POST'])
+def pause_timer():
+    global timer_running
+    print('pause')
+    if 'admin_name' in session:
+        timer_running = False
+        flash('Timer paused!', 'info')
+    return redirect(url_for('admin_dashboard'))
+
+
 @app.route('/')
 def index():
     if 'team_name' in session:
-        return render_template('index.html', questions=questions, team_name=session['team_name'], stats_data=stats_data)
-    else:
-        return redirect(url_for('login'))
+        if timer_running:
+            return render_template('index.html', questions=questions, team_name=session['team_name'], stats_data=stats_data)
+    
+    return redirect(url_for('login'))
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -67,12 +89,50 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('team_name', None)
+    session.pop('admin_name', None)
     flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
+
+# Admin user
+@app.route('/admin_login', methods=['GET', 'POST'])
+def admin_login():
+    if request.method == 'POST':
+        admin_name = request.form.get('admin_name')
+        password = request.form.get('password')
+
+        if admin_name == 'admin' and password == users_data[admin_name]:
+            session['admin_name'] = admin_name
+            flash('Admin login successful!', 'success')
+            return redirect(url_for('admin_dashboard'))
+        else:
+            flash('Invalid admin credentials. Please try again.', 'danger')
+
+    return render_template('admin_login.html')
+
+@app.route('/admin_dashboard')
+def admin_dashboard():
+    if 'admin_name' in session:
+        return render_template('admin_dashboard.html', stats_data=stats_data, questions=questions)
+    else:
+        flash('Please login as an admin to access the dashboard.', 'danger')
+        return redirect(url_for('login'))
+
+@app.before_request
+def restrict_admin_routes():
+    if request.endpoint in ['admin_dashboard', 'start_timer', 'pause_timer', 'reset_timer'] and 'admin_name' not in session:
+        return redirect(url_for('login'))
+    
+@app.before_request
+def restrict_answering():
+    if request.endpoint in [f'{i}' for i in range(len(questions))] and ('team_name' not in session or not timer_running):
+        return redirect(url_for('login'))
+
 
 
 @app.route('/question/<int:question_id>', methods=['GET', 'POST'])
 def question(question_id):
+    if 'team_name' not in session:
+        return redirect(url_for('login'))
     question_data = questions[question_id]
     team_name = session['team_name']
     attempt = stats_data[team_name][(question_id+1)][0]
@@ -89,7 +149,7 @@ def question(question_id):
             update_stats(team_name, question_id+1) # The +1 is for changing the index to question number
             return render_template('ans_correct.html')
         else:
-            print(f'attempts: {attempt}')
+            # print(f'attempts: {attempt}')
             return render_template('ans_wrong.html', attempt=TOTAL_ATTEMPTS-attempt-1)
 
     if solved:

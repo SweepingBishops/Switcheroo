@@ -1,0 +1,60 @@
+<h1>Admin Dashboard</h1>
+<p>Timer</p>
+<form action="{{ url_for('start_timer') }}" method="POST" style="display: inline;">
+    <button type="submit" class="timer-button hover-button">Start Timer</button>
+</form>
+<form action="{{ url_for('pause_timer') }}" method="POST" style="display: inline;">
+    <button type="submit" class="timer-button hover-button">Pause Timer</button>
+</form>
+<button class="timer-button hover-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
+
+<style>
+    .timer-button {
+        padding: 10px 20px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+    }
+
+    p {
+        font-size: 1.2em;
+        color :hsl(from color h s l)
+    }
+
+    .hover-button:hover {
+        transform: scale(1.05);
+    }
+
+    ul {
+        list-style-type: none;
+    }
+    ul li strong {
+        font-size: 1.2em;
+        margin-top: 10px;
+        display: block;
+    }
+    ul li ul {
+        margin-left: 20px;
+    }
+    ul li ul li {
+        margin-bottom: 5px;
+    }
+</style>
+
+<h2>Question Statistics</h2>
+<ul>
+    {% for team, stats in stats_data.items() %}
+        <li><strong>{{ team }}</strong>
+            <ul>
+                {% for question, data in stats.items() %}
+                    <li>Question {{ question }}: 
+                        <span>Attempts: {{ data[0] }}, Solved: {{ 'Yes' if data[1] else 'No' }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+</ul>
