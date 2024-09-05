@@ -58,6 +58,10 @@
         .logout-button:hover {
             background-color: #c82333;
         }
+        .attempt-over {
+            color:red
+        };
+        
     </style>
 </head>
 <body>
@@ -67,13 +71,16 @@
         <ul>
             {% for question in questions %}
                 {% set answered = stats_data[team_name][loop.index0 + 1][1] %}
+                {% set attempts = stats_data[team_name][loop.index0 + 1][0] %}
                 <li>
-                    <a href="{{ url_for('question', question_id=loop.index0) }}" class="{{ 'answered' if answered else '' }}">
-                        {{ question.title }}
+                    <a href="{{ url_for('question', question_id=loop.index0) }}" 
+   class="{% if answered %}answered{% elif TOTAL_ATTEMPTS - attempts == 0 %}attempt-over{% else %}{% endif %}">
+        {{ question.title }}
                     </a>
                 </li>
             {% endfor %}
         </ul>
     </div>
 </body>
+</html>
 </html>

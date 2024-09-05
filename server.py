@@ -56,30 +56,22 @@ else:
 
 timer_running = True
 
-@app.route('/start_timer', methods=['GET', 'POST'])
-def start_timer():
-    print('start')
+@app.route('/toggle_timer', methods=['GET', 'POST'])
+def toggle_timer():
     global timer_running
     if 'admin_name' in session:
-        timer_running = True
-        flash('Timer started!', 'success')
+        timer_running = not timer_running
+        if timer_running:
+            flash('Timer started!', 'success')
+        else:
+            flash('Timer paused!', 'info')
     return redirect(url_for('admin_dashboard'))
-
-@app.route('/pause_timer', methods=['GET', 'POST'])
-def pause_timer():
-    global timer_running
-    print('pause')
-    if 'admin_name' in session:
-        timer_running = False
-        flash('Timer paused!', 'info')
-    return redirect(url_for('admin_dashboard'))
-
 
 @app.route('/')
 def index():
     if 'team_name' in session:
         if timer_running:
-            return render_template('index.html', questions=questions, team_name=session['team_name'], stats_data=stats_data)
+            return render_template('index.html', questions=questions, team_name=session['team_name'], stats_data=stats_data, TOTAL_ATTEMPTS = TOTAL_ATTEMPTS)
     
     return redirect(url_for('login'))
 
@@ -128,7 +120,7 @@ def admin_login():
 @app.route('/admin_dashboard')
 def admin_dashboard():
     if 'admin_name' in session:
-        return render_template('admin_dashboard.html', stats_data=stats_data, questions=questions)
+        return render_template('admin_dashboard.html', stats_data=stats_data, questions=questions, timer_running=timer_running)
     else:
         flash('Please login as an admin to access the dashboard.', 'danger')
         return redirect(url_for('login'))
@@ -147,6 +139,9 @@ def freeze_website_on_timer_pause():
 
 @app.route('/question/<int:question_id>', methods=['GET', 'POST'])
 def question(question_id):
+    if not timer_running:
+        return redirect(url_for('login'))
+
     if 'team_name' not in session:
         return redirect(url_for('login'))
     question_data = questions[question_id]
@@ -179,4 +174,4 @@ def question(question_id):
     return render_template('question.html', question_data=question_data, attempt=TOTAL_ATTEMPTS-attempt)
 
 
-app.run(host = "0.0.0.0",port = 5000, debug=True)
+app.run(host = "0.0.0.0",port = 4000, debug=True)

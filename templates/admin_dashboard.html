@@ -1,11 +1,12 @@
 <h1>Admin Dashboard</h1>
 <h2>Controls</h2>
-<form action="{{ url_for('start_timer') }}" method="POST" style="display: inline;">
-    <button type="submit" class="timer-button hover-button">Unfreeze</button>
+
+<form action="{{ url_for('toggle_timer') }}" method="POST" style="display: inline;">
+    <button type="submit" class="timer-button hover-button {{ 'inactive-button' if timer_running else 'active-button' }}">
+        {{ 'Freeze' if timer_running else 'Unfreeze' }}
+    </button>
 </form>
-<form action="{{ url_for('pause_timer') }}" method="POST" style="display: inline;">
-    <button type="submit" class="timer-button hover-button">Freeze</button>
-</form>
+
 <button class="timer-button hover-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
 
 <style>
@@ -19,30 +20,22 @@
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    p {
-        font-size: 1.2em;
-        color :hsl(from color h s l)
-    }
-
     .hover-button:hover {
         transform: scale(1.05);
     }
 
-    ul {
-        list-style-type: none;
+    .active-button {
+        background-color: #4CAF50; /* Green color to indicate running (Freeze option) */
+        color: white;
     }
-    ul li strong {
-        font-size: 1.2em;
-        margin-top: 10px;
-        display: block;
-    }
-    ul li ul {
-        margin-left: 20px;
-    }
-    ul li ul li {
-        margin-bottom: 5px;
+
+    .inactive-button {
+        background-color: #f44336; /* Red color to indicate paused (Unfreeze option) */
+        color: white;
     }
 </style>
+
+
 
 <h2>Question Statistics</h2>
 <ul>
