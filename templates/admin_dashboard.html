@@ -1,10 +1,10 @@
 <h1>Admin Dashboard</h1>
-<p>Timer</p>
+<h2>Controls</h2>
 <form action="{{ url_for('start_timer') }}" method="POST" style="display: inline;">
-    <button type="submit" class="timer-button hover-button">Start Timer</button>
+    <button type="submit" class="timer-button hover-button">Unfreeze</button>
 </form>
 <form action="{{ url_for('pause_timer') }}" method="POST" style="display: inline;">
-    <button type="submit" class="timer-button hover-button">Pause Timer</button>
+    <button type="submit" class="timer-button hover-button">Freeze</button>
 </form>
 <button class="timer-button hover-button" onclick="window.location.href='{{ url_for('logout') }}'">Logout</button>
 
