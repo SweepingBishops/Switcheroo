@@ -139,8 +139,8 @@ def restrict_admin_routes():
         return redirect(url_for('login'))
     
 @app.before_request
-def restrict_answering():
-    if not timer_running and 'admin_name' not in session and request.endpoint != 'login':
+def freeze_website_on_timer_pause():
+    if not timer_running and 'admin_name' not in session and request.endpoint not in ['login','admin_login']:
         return redirect(url_for('login'))
 
 
