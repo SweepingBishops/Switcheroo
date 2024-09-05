@@ -1,17 +1,29 @@
+#!/usr/bin/env python
 from flask import Flask, render_template, redirect, url_for, request, session, flash
 import json
 import time
+from os.path import isfile
+from hashlib import sha256
 
 app = Flask(__name__)
 app.secret_key = "Zucc"
 
-with open('static/questions.json', 'r') as file:
+CONFIG_FILE = 'static/config.json'
+with open(CONFIG_FILE, 'r') as file:
+    config = json.load(file)
+    TOTAL_ATTEMPTS = config['total_attempts']
+    ATTEMPTS_FILE = config['attempts_file']
+    STATS_FILE = config['stats_file']
+    USERS_FILE = config['users_file']
+    QUESTIONS_FILE = config['questions_file']
+
+with open(QUESTIONS_FILE, 'r') as file:
     questions = json.load(file)
 
 def set_attempts():
     attempts = {}
     for team in users_data:
-        attempts[team] = {}
+        attempts[team] = dict()
         for i in range(1, len(questions)+1):
             attempts[team][i] = [0,False]
     return attempts
@@ -22,23 +34,25 @@ def update_stats(team_name, question):
     record = f"{team_name} solved Question {question} at {time_str}\n"
 
     stats_data[team_name][question][1] = True
+    stats_data[team_name][question].append(time_str)
     update_attempt(stats_data)
-    with open('static/stats.csv', 'a') as file:
+    with open(STATS_FILE, 'a') as file:
         file.write(record)
 
-
-
 def update_attempt(stats_data):
-    with open('static/attempts.json', 'w') as file:
+    with open(ATTEMPTS_FILE, 'w') as file:
         json.dump(stats_data, file, indent=4)
 
-with open('static/users.json',  'r') as file:
+with open(USERS_FILE,  'r') as file:
     users_data = json.load(file)
 
 
-stats_data = set_attempts()
-update_attempt(stats_data)
-TOTAL_ATTEMPTS = 3
+if isfile(ATTEMPTS_FILE):
+    with open(ATTEMPTS_FILE, 'r') as file:
+        stats_data = {k:{int(k1):v1 for k1,v1 in v.items()} for k,v in json.load(file).items()}
+else:
+    stats_data = set_attempts()
+    update_attempt(stats_data)
 
 timer_running = True
 
@@ -75,6 +89,7 @@ def login():
     if request.method == 'POST':
         team_name = request.form.get('team_name')
         password = request.form.get('password')
+        password = sha256(password.encode('utf-8')).hexdigest()
 
         if team_name in users_data and password == users_data[team_name]:
             session['team_name'] = team_name
@@ -99,6 +114,7 @@ def admin_login():
     if request.method == 'POST':
         admin_name = request.form.get('admin_name')
         password = request.form.get('password')
+        password = sha256(password.encode('utf-8')).hexdigest()
 
         if admin_name == 'admin' and password == users_data[admin_name]:
             session['admin_name'] = admin_name
@@ -124,7 +140,7 @@ def restrict_admin_routes():
     
 @app.before_request
 def restrict_answering():
-    if request.endpoint in [f'{i}' for i in range(len(questions))] and ('team_name' not in session or not timer_running):
+    if not timer_running and 'admin_name' not in session and request.endpoint != 'login':
         return redirect(url_for('login'))
 
 
@@ -139,6 +155,8 @@ def question(question_id):
     solved = stats_data[team_name][(question_id+1)][1]
     # print(attempt)
     if request.method == 'POST':
+        if not timer_running:
+            return redirect(url_for('login'))
         stats_data[team_name][(question_id+1)][0] = attempt + 1
         update_attempt(stats_data)
         user_answer = (request.form.get('answer'))
