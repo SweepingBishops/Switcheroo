@@ -76,18 +76,39 @@
             font-size: 18px;
             color: #333;
         }
+        .download-link {
+            text-align: center;
+            margin: 20px 0;
+        }
+        a.download-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 18px;
+            transition: background-color 0.3s;
+        }
+        a.download-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>{{ question_data['title'] }}</h1>
         <img src="{{url_for('static', filename='questions/' + question_data['text'])}}" alt="Question Image" style="display: block; margin: 0 auto;">
-        
-        <!-- Number of Attempts Section -->
         <div class="attempts">
             Number of attempts left : {{ attempt }}
         </div>
-        <!-- <h1>{{ attempt }}</h1> -->
+
+        {% if question_data['resources'] %}
+        <div class="download-link">
+            <a class="download-button" href="{{ url_for('static', filename='questions/' + question_data['resources']) }}" download>
+                Download Resources
+            </a>
+        </div>
+        {% endif %}
 
         <form method="POST">
             <div class="form-group">

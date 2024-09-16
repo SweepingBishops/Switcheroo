@@ -135,7 +135,14 @@ def freeze_website_on_timer_pause():
     if not timer_running and 'admin_name' not in session and request.endpoint not in ['login','admin_login']:
         return redirect(url_for('login'))
 
+@app.route('/resources/<int:question_id>', methods=['GET', 'POST'])
+def resources(question_id):
+    if not timer_running:
+        return redirect(url_for('login'))
 
+    if 'team_name' not in session:
+        return redirect(url_for('login'))
+    question_data = questions[question_id]
 
 @app.route('/question/<int:question_id>', methods=['GET', 'POST'])
 def question(question_id):
@@ -170,8 +177,7 @@ def question(question_id):
 
     if attempt >= TOTAL_ATTEMPTS:
             return render_template('freeze.html', title_message=f"You have exhausted all your attempts for Question {question_id+1}", freeze_message = f"You've attempted this question {attempt} times")
-            
     return render_template('question.html', question_data=question_data, attempt=TOTAL_ATTEMPTS-attempt)
 
 
-app.run(host = "0.0.0.0",port = 4000, debug=True)
+app.run(host = "0.0.0.0",port = 4000, debug=False)
