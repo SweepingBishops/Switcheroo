@@ -6,7 +6,7 @@ from os.path import isfile
 from hashlib import sha256
 
 app = Flask(__name__)
-app.secret_key = "Zucc"
+app.secret_key = "your_super_secret_key"
 
 CONFIG_FILE = 'static/config.json'
 with open(CONFIG_FILE, 'r') as file:
@@ -155,7 +155,7 @@ def question(question_id):
     team_name = session['team_name']
     attempt = stats_data[team_name][(question_id+1)][0]
     solved = stats_data[team_name][(question_id+1)][1]
-    # print(attempt)
+    
     if request.method == 'POST':
         if not timer_running:
             return redirect(url_for('login'))
@@ -163,13 +163,10 @@ def question(question_id):
         update_attempt(stats_data)
         user_answer = (request.form.get('answer'))
         correct_answer = question_data['answer']        
-        # stats_data[session['team_name']] = {question_id: attempt}
         if user_answer == correct_answer and attempt < TOTAL_ATTEMPTS:
-            # update_score(team_name,question_id+1)
             update_stats(team_name, question_id+1) # The +1 is for changing the index to question number
             return render_template('ans_correct.html')
         else:
-            # print(f'attempts: {attempt}')
             return render_template('ans_wrong.html', attempt=TOTAL_ATTEMPTS-attempt-1)
 
     if solved:
