@@ -42,9 +42,24 @@ Install Flask using pip:
 pip install Flask
 ```
 
-### 4. Add Questions
+### 4. Add Questions and Downloadable Resources
 
 You can add questions to the competition by placing image files in the `static/questions` directory. The images should be named in the format `qN.png`, where `N` is the question number.
+
+To include downloadable resources for specific questions, add the `resources` field to the `questions.json` file. Specify the path to the resource file using the format `"\path\to\resource.txt"`.
+
+For example, if you want to include a resource file named `q4_cipher.txt` for question 4, modify the `questions.json` file as follows:
+
+```json
+{
+    "title": "Question 4",
+    "text": "q4.png",
+    "answer": "42",
+    "resources": "static/questions/q4_cipher.txt"
+}
+```
+
+Remember to place the resource file in the `static/questions` directory and update the `questions.json` file accordingly for each question that requires a downloadable resource.
 
 ### 5. Configure Answers
 
@@ -60,7 +75,7 @@ The correct answers should be specified in the `questions.json` file in the foll
 
 Repeat this format for each question.
 
-### 6. Configure User Logins
+### 7. Configure User Logins
 
 User login credentials should be added to the `users.json` file in the following format:
 
@@ -70,9 +85,11 @@ User login credentials should be added to the `users.json` file in the following
 }
 ```
 
+To ensure secure storage of passwords, you can use the `generate_passwords.py` script provided in the repository. This script hashes the password using SHA-1 and adds it to the `users.json` file.
+
 You can add as many teams as needed.
 
-### 7. Run the Server
+### 8. Run the Server
 
 To start the Flask server, simply run the `server.py` file:
 
@@ -80,4 +97,4 @@ To start the Flask server, simply run the `server.py` file:
 python server.py
 ```
 
-The server will start, and you can access it via your web browser at `http://127.0.0.1:5000/`.
+The server will start, and you can access it via your web browser at `http://127.0.0.1:4000/`.
