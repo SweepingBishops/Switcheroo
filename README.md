@@ -2,6 +2,7 @@
 # Switcheroo
 
 Switcheroo is a simple Flask-based web server designed to host coding competitions where teams of two people can participate. The server allows users to log in, view questions, submit answers, and track their scores.
+Test line.
 
 ## Features
 
