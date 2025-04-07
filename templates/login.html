@@ -20,29 +20,49 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             padding: 20px;
-            width: 300px;
-        }
-        h1 {
+            width: 350px;
             text-align: center;
+        }
+
+        .logo {
+            width: 100px;
+            margin: 0 auto 20px;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #555;
             margin-bottom: 20px;
         }
+
         .form-group {
             padding-top: 10px;
-            padding-right: 10px ;
             margin-bottom: 15px;
+            text-align: left;
         }
+
         label {
             display: block;
             font-weight: bold;
         }
+
         input[type="text"],
         input[type="password"] {
-            width: 100%;
+            width: 90%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
+            align-items: center;
+            align-self: center;
         }
+
         button[type="submit"] {
             background-color: #007bff;
             color: #fff;
@@ -53,23 +73,28 @@
             font-size: 18px;
             transition: background-color 0.3s;
         }
+
         button[type="submit"]:hover {
             background-color: #0056b3;
         }
+
         .messages {
             list-style: none;
             padding: 0;
         }
+
         .alert {
             padding: 10px;
             margin-bottom: 10px;
             border-radius: 10px;
         }
+
         .alert-success {
             background-color: #dff0d8;
             color: #3c763d;
             border: 1px solid #3c763d;
         }
+
         .alert-danger {
             background-color: #f2dede;
             color: #a94442;
@@ -79,18 +104,9 @@
 </head>
 <body>
     <div class="container">
-        <h1>Login</h1>
-
-        <!-- Display Flash Messages
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li class="alert alert-{{ message[1] }}">{{ message[0] }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %} -->
+        <img src="{{ url_for('static', filename='cc_logo.png') }}" alt="Coding Club Logo" class="logo">
+        <h1>Against Time</h1>
+        <p class="subtitle">Powered by Coding Club NISER</p>
 
         <form method="POST">
             <div class="form-group">
