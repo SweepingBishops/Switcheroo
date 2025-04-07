@@ -1,47 +1,57 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Question List</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            color: #333;
         }
         h1 {
             text-align: center;
             margin-bottom: 20px;
-            color: orange;
+            color: #ff8c00;
         }
         .container {
             background-color: #fff;
-            max-width: 400px;
-            margin: 200px auto;
-            padding: 20px;
-            border: 10px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            position: relative;
+            max-width: 500px;
+            margin: 100px auto;
+            padding: 30px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
         ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
         li {
-            font-size: 18px;
-            margin-bottom: 10px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         a {
             text-decoration: none;
             color: #007bff;
+            font-weight: bold;
         }
         a:hover {
             text-decoration: underline;
         }
         .answered {
             color: green;
+        }
+        .attempt-over {
+            color: red;
         }
         .logout-button {
             position: fixed;
@@ -53,15 +63,16 @@
             padding: 10px 20px;
             border-radius: 5px;
             cursor: pointer;
-            z-index: 1000;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         .logout-button:hover {
             background-color: #c82333;
         }
-        .attempt-over {
-            color:red
-        };
-        
+        .solved-count {
+            font-size: 14px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -72,15 +83,16 @@
             {% for question in questions %}
                 {% set answered = stats_data[team_name][loop.index0 + 1][1] %}
                 {% set attempts = stats_data[team_name][loop.index0 + 1][0] %}
+                {% set solved_count = solved_data[loop.index0 + 1] %}
                 <li>
                     <a href="{{ url_for('question', question_id=loop.index0) }}" 
-   class="{% if answered %}answered{% elif TOTAL_ATTEMPTS - attempts == 0 %}attempt-over{% else %}{% endif %}">
-        {{ question.title }}
+                       class="{% if answered %}answered{% elif TOTAL_ATTEMPTS - attempts == 0 %}attempt-over{% else %}{% endif %}">
+                        {{ question.title }}
                     </a>
+                    <span class="solved-count">({{ solved_count }} {{ 'team' if solved_count == 1 else 'teams' }} solved)</span>
                 </li>
             {% endfor %}
         </ul>
     </div>
 </body>
-</html>
 </html>

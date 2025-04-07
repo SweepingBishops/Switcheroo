@@ -16,6 +16,7 @@ with open(CONFIG_FILE, 'r') as file:
     STATS_FILE = config['stats_file']
     USERS_FILE = config['users_file']
     QUESTIONS_FILE = config['questions_file']
+    MAX_TEAM_PER_QUESTION = config['max_team_per_question']
 
 with open(QUESTIONS_FILE, 'r') as file:
     questions = json.load(file)
@@ -71,7 +72,8 @@ def toggle_timer():
 def index():
     if 'team_name' in session:
         if timer_running:
-            return render_template('index.html', questions=questions, team_name=session['team_name'], stats_data=stats_data, TOTAL_ATTEMPTS = TOTAL_ATTEMPTS)
+            solved_data_sheet = solved_data()
+            return render_template('index.html', questions=questions, team_name=session['team_name'], stats_data=stats_data, solved_data = solved_data_sheet, TOTAL_ATTEMPTS = TOTAL_ATTEMPTS)
     
     return redirect(url_for('login'))
 
@@ -135,14 +137,15 @@ def freeze_website_on_timer_pause():
     if not timer_running and 'admin_name' not in session and request.endpoint not in ['login','admin_login']:
         return redirect(url_for('login'))
 
-@app.route('/resources/<int:question_id>', methods=['GET', 'POST'])
-def resources(question_id):
-    if not timer_running:
-        return redirect(url_for('login'))
 
-    if 'team_name' not in session:
-        return redirect(url_for('login'))
-    question_data = questions[question_id]
+def check_teams_solved(question_id):
+    return sum([1 for k,v in stats_data.items() if v[question_id+1][1] == True])
+
+def solved_data():
+    data = {}
+    for question_id in range(1, len(questions) + 1):
+        data[question_id] = sum(1 for team_stats in stats_data.values() if team_stats[question_id][1])
+    return data
 
 @app.route('/question/<int:question_id>', methods=['GET', 'POST'])
 def question(question_id):
@@ -155,7 +158,8 @@ def question(question_id):
     team_name = session['team_name']
     attempt = stats_data[team_name][(question_id+1)][0]
     solved = stats_data[team_name][(question_id+1)][1]
-    
+    teams_solved = check_teams_solved(question_id)
+
     if request.method == 'POST':
         if not timer_running:
             return redirect(url_for('login'))
@@ -171,6 +175,9 @@ def question(question_id):
 
     if solved:
         return render_template('freeze.html', title_message=f"You have already solved Question {question_id+1}")
+
+    if teams_solved >= MAX_TEAM_PER_QUESTION:
+        return render_template('freeze.html', title_message=f"Maximum teams have solved Question {question_id+1}", freeze_message = f"{teams_solved} teams have already solved this question")
 
     if attempt >= TOTAL_ATTEMPTS:
             return render_template('freeze.html', title_message=f"You have exhausted all your attempts for Question {question_id+1}", freeze_message = f"You've attempted this question {attempt} times")
