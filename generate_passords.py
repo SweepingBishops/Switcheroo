@@ -10,11 +10,20 @@ def generate_hashed_password(password):
 
 # Dictionary containing team names and passwords
 teams = {
-    "team1": "password1",
-    "team2": "password2",
-    "team3": "password3",
-    "testing": "test123",
-    "admin": "admin123",
+    "admin"         : "butterscotch",
+    "Souvik"        : "a",
+    "Ansh"          : "b",
+    "Swayamjit"     : "kundu15",
+    "Bratanu"       : "c",
+    "Rohan"         : "abc123",
+    "Mohit"         : "bhannat",
+    "Omm"           : "Rurushu1234",
+    "Nirbhay"       : "Nirbhay18#",
+    "Sahil"         : "johan.liebert",
+    "Jitesh"        : "APR12Jitu",
+    "Anshika"       : "d",
+    "Aryan"         : "aryannn123",
+    "Nehal"         : "f",
 }
 
 hashed_passwords = {}

@@ -1,6 +1,6 @@
 {
     "total_attempts": 3,
-    "max_team_per_question": 3,
+    "max_team_per_question": 4,
     "attempts_file": "static/attempts.json",
     "questions_file": "static/questions.json",
     "users_file": "static/users.json",
